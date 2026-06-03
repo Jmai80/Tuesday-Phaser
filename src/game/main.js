@@ -2,6 +2,12 @@ import { Boot } from './scenes/Boot';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
+import { OrderGame } from './scenes/OrderGame';
+import { SumGame } from './scenes/SumGame';
+import { ColorGame } from './scenes/ColorGame';
+import { MemoryGame } from './scenes/MemoryGame';
+import { PuzzleGame } from './scenes/PuzzleGame';
+import { StarGame } from './scenes/StarGame';
 import { Preloader } from './scenes/Preloader';
 import { AUTO, Game, Scale } from 'phaser';
 
@@ -21,6 +27,12 @@ const config = {
         Boot,
         Preloader,
         MainMenu,
+        OrderGame,
+        SumGame,
+        ColorGame,
+        MemoryGame,
+        PuzzleGame,
+        StarGame,
         MainGame,
         GameOver
     ]
