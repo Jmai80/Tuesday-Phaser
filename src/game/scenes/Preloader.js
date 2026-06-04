@@ -33,6 +33,10 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('logo', 'logo.png');
+
+        // ljud att använda i flera spel
+        this.load.audio('correct', 'correct.mp3');
+        this.load.audio('good', 'good.mp3');
     }
 
     create ()

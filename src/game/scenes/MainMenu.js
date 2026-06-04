@@ -24,10 +24,10 @@ export class MainMenu extends Scene
             { title: 'Pussel',            scene: 'PuzzleGame' },
             { title: 'Memory',            scene: 'MemoryGame' },
             { title: 'Ljudjakten',        scene: null },
-            { title: 'Pusselplaneten',    scene: null },
+            { title: 'Ordspelet',         scene: 'WordGame' },
             { title: 'Stjärnsamlaren',    scene: 'StarGame' },
             { title: 'Rimraketen',        scene: null },
-            { title: 'Mönstermagin',      scene: null }
+            { title: 'Mönstermagin',      scene: 'PatternGame' }
         ];
 
         // --- Rubrik ---

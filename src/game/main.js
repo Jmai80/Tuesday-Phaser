@@ -8,6 +8,8 @@ import { ColorGame } from './scenes/ColorGame';
 import { MemoryGame } from './scenes/MemoryGame';
 import { PuzzleGame } from './scenes/PuzzleGame';
 import { StarGame } from './scenes/StarGame';
+import { WordGame } from './scenes/WordGame';
+import { PatternGame } from './scenes/PatternGame';
 import { Preloader } from './scenes/Preloader';
 import { AUTO, Game, Scale } from 'phaser';
 
@@ -33,6 +35,8 @@ const config = {
         MemoryGame,
         PuzzleGame,
         StarGame,
+        WordGame,
+        PatternGame,
         MainGame,
         GameOver
     ]
