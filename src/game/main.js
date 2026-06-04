@@ -10,6 +10,8 @@ import { PuzzleGame } from './scenes/PuzzleGame';
 import { StarGame } from './scenes/StarGame';
 import { WordGame } from './scenes/WordGame';
 import { PatternGame } from './scenes/PatternGame';
+import { RhymeGame } from './scenes/RhymeGame';
+import { SoundGame } from './scenes/SoundGame';
 import { Preloader } from './scenes/Preloader';
 import { AUTO, Game, Scale } from 'phaser';
 
@@ -37,6 +39,8 @@ const config = {
         StarGame,
         WordGame,
         PatternGame,
+        RhymeGame,
+        SoundGame,
         MainGame,
         GameOver
     ]

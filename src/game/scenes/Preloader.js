@@ -37,6 +37,7 @@ export class Preloader extends Scene
         // ljud att använda i flera spel
         this.load.audio('correct', 'correct.mp3');
         this.load.audio('good', 'good.mp3');
+        this.load.audio('yay', 'yay.mp3');
     }
 
     create ()

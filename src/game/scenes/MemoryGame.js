@@ -10,25 +10,24 @@ export class MemoryGame extends BaseGameScene
     create ()
     {
         // --- Tillstånd ---
-        this.firstCard = null;     // första uppvända kortet som väntar på match
-        this.locked = false;       // spärr medan ett par jämförs
+        this.firstCard = null;
+        this.locked = false;
         this.pairsFound = 0;
         this.totalPairs = 15;
         this.startTime = null;
         this.finished = false;
 
-        // --- Gnista-textur (en gång) ---
         this.ensureSparkTexture();
 
-        // --- Header ---
-        this.add.text(this.scale.width / 2, 55, 'Hitta paren!', {
-            fontFamily: 'Arial', fontSize: '30px', color: '#ffffff'
-        }).setOrigin(0.5);
+        // --- Animerad titel (alla inställningar finns i metoden längst ner) ---
+        this.createAnimatedTitle();
 
+        // --- Timer ---
         this.timerText = this.add.text(this.scale.width - 20, 30, 'Tid: 0.0 s', {
             fontFamily: 'Arial', fontSize: '24px', color: '#ffffff'
         }).setOrigin(1, 0);
 
+        // --- Tillbaka-knapp ---
         const backBtn = this.add.rectangle(90, 30, 140, 44, 0x444444)
             .setStrokeStyle(2, 0xffffff)
             .setInteractive({ useHandCursor: true });
@@ -39,7 +38,7 @@ export class MemoryGame extends BaseGameScene
         backBtn.on('pointerout',  () => backBtn.setFillStyle(0x444444));
         backBtn.on('pointerdown', () => this.scene.start('MainMenu'));
 
-        // --- Bygg kortleken: 15 emojis i par, blandade ---
+        // --- Kortlek: 15 emojis i par, blandade ---
         const symbols = ['🚗','☀️','🐱','🐶','🍎','⭐','🌸','🐟','🎈','🍌','🐸','🚀','🦋','🍓','🌙'];
         const deck = [...symbols, ...symbols];   // varje symbol två gånger = 30
         this.shuffle(deck);
@@ -73,6 +72,106 @@ export class MemoryGame extends BaseGameScene
         }
     }
 
+    // =====================================================================
+    //   ANIMERAD TITEL  —  experimentera fritt!
+    //   Nästan allt du vill ändra finns i CFG-blocket direkt nedanför:
+    //   text, typsnitt, färger, 3D-tjocklek och hur den rör sig.
+    // =====================================================================
+    createAnimatedTitle ()
+    {
+        const CFG = {
+            // ---- INNEHÅLL & UTSEENDE ----
+            text:        'Hitta paren!',                    // ← byt texten
+            x:           this.scale.width / 2,              //   mitten i sidled
+            y:           55,                                // ← vilolinje (höjd)
+            fontFamily:  'Arial Black, Arial, sans-serif',  // ← byt typsnitt
+            fontSize:    48,                                // ← textstorlek
+            faceColor:   '#ffd23b',                         // ← ovansidans färg
+            depthColor:  '#8a6a00',                         // ← 3D-djupets färg (mörkare)
+            depthLayers: 4,                                 // ← hur "tjock" 3D-känslan är
+            letterGap:   4,                                 //   avstånd mellan bokstäver
+
+            // ---- ENTRÉ-ANIMATION (bokstäverna faller in) ----
+            dropHeight:  300,            //   hur långt ovanifrån de startar
+            dropEase:    'Bounce.Out',   // ← prova 'Back.Out' eller 'Elastic.Out'
+            dropTime:    800,            //   ms per bokstav
+            dropStagger: 60,             //   ms mellan att varje bokstav släpps
+
+            // ---- IDLE-ANIMATION (kul gupp som fortsätter) ----
+            idleEnabled: true,           // ← sätt false för att stänga av guppet
+            bobAmount:   8,              // ← hur högt de guppar (pixlar)
+            bobTime:     900             // ← ms för ett upp-och-ner
+        };
+
+        const style = { fontFamily: CFG.fontFamily, fontSize: CFG.fontSize + 'px' };
+        const chars = CFG.text.split('');
+
+        // 1) Mät varje bokstavs bredd så att hela ordet kan centreras
+        const widths = chars.map(ch => {
+            const t = this.add.text(0, 0, ch === ' ' ? '\u00A0' : ch, style).setVisible(false);
+            const w = t.width;
+            t.destroy();
+            return w;
+        });
+        const totalWidth = widths.reduce((a, b) => a + b, 0) + CFG.letterGap * (chars.length - 1);
+
+        // 2) Bygg varje bokstav som en egen container (så den kan animeras för sig)
+        let cx = CFG.x - totalWidth / 2;
+        chars.forEach((ch, i) => {
+            const w = widths[i];
+            const lx = cx + w / 2;
+
+            if (ch !== ' ') {
+                const letter = this.add.container(lx, CFG.y);
+
+                // 3D-djup: samma bokstav i mörk färg, staplad snett bakåt-nedåt
+                for (let d = CFG.depthLayers; d >= 1; d--) {
+                    const shadow = this.add.text(d * 1.5, d * 1.5, ch, {
+                        ...style, color: CFG.depthColor
+                    }).setOrigin(0.5);
+                    letter.add(shadow);
+                }
+                // Ovansidan (ljus bokstav överst)
+                const faceLetter = this.add.text(0, 0, ch, {
+                    ...style, color: CFG.faceColor
+                }).setOrigin(0.5);
+                letter.add(faceLetter);
+
+                // 3) ENTRÉ: starta ovanför och tweena ner till vilolinjen
+                letter.y = CFG.y - CFG.dropHeight;
+                this.tweens.add({
+                    targets: letter,
+                    y: CFG.y,
+                    ease: CFG.dropEase,
+                    duration: CFG.dropTime,
+                    delay: i * CFG.dropStagger,          // en bokstav i taget
+                    onComplete: () => {
+                        // 4) IDLE: när bokstaven landat, starta det eviga guppet
+                        if (CFG.idleEnabled) {
+                            this.tweens.add({
+                                targets: letter,
+                                y: CFG.y - CFG.bobAmount,  // gupp upp...
+                                ease: 'Sine.InOut',
+                                duration: CFG.bobTime,
+                                yoyo: true,                // ...och ner igen
+                                repeat: -1                 // för alltid
+                                // PROVA andra kul rörelser: byt raden "y:" ovan mot
+                                //   angle: 6      → en liten vridning fram och tillbaka
+                                //   scale: 1.12   → en pulserande storlek
+                            });
+                        }
+                    }
+                });
+
+                // VILL DU HELLRE SWISHA IN FRÅN SIDAN än att falla uppifrån?
+                //   Byt rad "letter.y = ..." mot:  letter.x = lx - 700;
+                //   och i tween:n ovan: byt "y: CFG.y" mot "x: lx" och ease till 'Back.Out'.
+            }
+
+            cx += w + CFG.letterGap;
+        });
+    }
+
     handleCardClick (card)
     {
         if (this.locked || card.faceUp || card.solved) return;
@@ -81,14 +180,11 @@ export class MemoryGame extends BaseGameScene
         this.revealCard(card);
 
         if (!this.firstCard) {
-            // första kortet i paret
             this.firstCard = card;
         } else {
-            // andra kortet – jämför
             this.locked = true;
 
             if (this.firstCard.value === card.value) {
-                // Match!
                 card.solved = true;
                 this.firstCard.solved = true;
                 card.rect.setFillStyle(0xa8e6a3);
@@ -104,7 +200,6 @@ export class MemoryGame extends BaseGameScene
                     this.time.delayedCall(500, () => this.showVictory(total));
                 }
             } else {
-                // Ingen match – vänd tillbaka båda efter en kort paus
                 const a = this.firstCard, b = card;
                 this.firstCard = null;
                 this.time.delayedCall(800, () => {
