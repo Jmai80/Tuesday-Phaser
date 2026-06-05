@@ -69,6 +69,24 @@ export class SoundGame extends BaseGameScene
         // --- Första ljudet ---
         this.newRound();
     }
+    createBackButton ()
+{
+    const btn = super.createBackButton();   // responsiv grund från basen
+
+    // Din styling för Ljudjakten
+    Object.assign(btn.style, {
+        background:   '#1a1a4a',            // mörkblå som matchar spelplanens färg
+        border:       '2px solid #3366cc',
+        borderRadius: '12px',
+        color:        '#ffffff'
+    });
+
+    // Valfritt: hover-effekt via CSS-transition (lägg transition i basen om du inte redan har det)
+    btn.addEventListener('mouseenter', () => btn.style.background = '#2a2a6a');
+    btn.addEventListener('mouseleave', () => btn.style.background = '#1a1a4a');
+
+    return btn;
+}
 
     newRound ()
     {
@@ -80,7 +98,7 @@ export class SoundGame extends BaseGameScene
 
         // Välj mål och läs upp det
         this.target = this.items[Math.floor(Math.random() * this.items.length)];
-        this.speakWord(this.target.ord);
+        //this.speakWord(this.target.ord);
 
         // Bygg valen: rätt bild + distraktorer
         const others = this.items.filter(it => it.ord !== this.target.ord);

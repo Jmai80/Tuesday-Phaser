@@ -104,6 +104,8 @@ export class BaseGameScene extends Scene
         minHeight:     '44px',        // iOS minimum touch target
         touchAction:   'manipulation', // förhindrar dubbelklickszoom
         userSelect:    'none'
+
+        
     });
 
     document.body.appendChild(btn);
@@ -129,5 +131,9 @@ export class BaseGameScene extends Scene
     };
     this.events.once('shutdown', cleanup);
     this.events.once('destroy',  cleanup);
+
+    
+    return btn;
+
 }
 }
