@@ -64,19 +64,7 @@ export class SoundGame extends BaseGameScene
             fontFamily: 'Arial', fontSize: '18px', color: '#cccccc'
         }).setOrigin(0.5);
 
-        // --- Tillbaka-knapp ---
-        const backBtn = this.add.rectangle(90, 30, 140, 44, 0x444444)
-            .setStrokeStyle(2, 0xffffff)
-            .setInteractive({ useHandCursor: true });
-        this.add.text(90, 30, '← Meny', {
-            fontFamily: 'Arial', fontSize: '22px', color: '#ffffff'
-        }).setOrigin(0.5);
-        backBtn.on('pointerover', () => backBtn.setFillStyle(0x666666));
-        backBtn.on('pointerout',  () => backBtn.setFillStyle(0x444444));
-        backBtn.on('pointerdown', () => {
-            if (window.speechSynthesis) window.speechSynthesis.cancel();
-            this.scene.start('MainMenu');
-        });
+        this.createBackButton();
 
         // --- Första ljudet ---
         this.newRound();

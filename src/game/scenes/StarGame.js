@@ -40,15 +40,7 @@ export class StarGame extends BaseGameScene
             fontFamily: 'Arial', fontSize: '24px', color: '#ffffff'
         }).setOrigin(1, 0);
 
-        const backBtn = this.add.rectangle(90, 30, 140, 44, 0x444444)
-            .setStrokeStyle(2, 0xffffff)
-            .setInteractive({ useHandCursor: true });
-        this.add.text(90, 30, '← Meny', {
-            fontFamily: 'Arial', fontSize: '22px', color: '#ffffff'
-        }).setOrigin(0.5);
-        backBtn.on('pointerover', () => backBtn.setFillStyle(0x666666));
-        backBtn.on('pointerout',  () => backBtn.setFillStyle(0x444444));
-        backBtn.on('pointerdown', () => this.scene.start('MainMenu'));
+        this.createBackButton();
 
         // --- Första stjärnan ---
         this.spawnStar();
