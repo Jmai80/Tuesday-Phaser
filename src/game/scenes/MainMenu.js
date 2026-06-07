@@ -26,7 +26,10 @@ export class MainMenu extends Scene
             { title: 'Rimraketen',     scene: 'RhymeGame' },
             { title: 'Mönstermagin',   scene: 'PatternGame' },
             { title: 'Tre i rad',      scene: 'TicTacToe' },
-            { title: 'Fruktfångaren',  scene: 'FruitCatcher' }
+            { title: 'Fruktfångaren',  scene: 'FruitCatcher' },
+            { title: 'Labyrinten',     scene: 'MazeGame' },
+            { title: 'Spinnern',       scene: 'SpinnerGame' },
+            { title: 'Pac-Man',        scene: 'PacManGame' }
         ];
 
         // --- Bakgrund: mjuk gradient (ligger UTANFÖR scroll-ytan) ---

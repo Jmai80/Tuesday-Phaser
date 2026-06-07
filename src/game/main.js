@@ -14,6 +14,9 @@ import { RhymeGame } from './scenes/RhymeGame';
 import { SoundGame } from './scenes/SoundGame';
 import { TicTacToe } from './scenes/TicTacToe';
 import { FruitCatcher } from './scenes/FruitCatcher';
+import { MazeGame } from './scenes/MazeGame';
+import { SpinnerGame } from './scenes/SpinnerGame';
+import { PacManGame } from './scenes/PacMan';
 import { Preloader } from './scenes/Preloader';
 
 import { AUTO, Game, Scale } from 'phaser';
@@ -46,11 +49,20 @@ const config = {
         SoundGame,
         TicTacToe,
         FruitCatcher,
+        MazeGame,
+        SpinnerGame,
+        PacManGame,
         MainGame,
         GameOver
     ],
     dom: {
         createContainer: true
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false
+        }
     }
 };
 
