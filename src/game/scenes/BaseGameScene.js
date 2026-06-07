@@ -15,6 +15,8 @@ export class BaseGameScene extends Scene
 
     launchFirework (x, y, color)
     {
+        this.ensureSparkTexture();
+        
         const emitter = this.add.particles(x, y, 'spark', {
             speed: { min: 80, max: 260 },
             angle: { min: 0, max: 360 },
@@ -86,54 +88,48 @@ export class BaseGameScene extends Scene
     }
 
     createBackButton ()
-{
-    const btn = document.createElement('button');
-    btn.textContent = '← Meny';
+    {
+        const btn = document.createElement('button');
+        btn.textContent = '← Meny';
 
-    Object.assign(btn.style, {
-        position:      'fixed',
-        fontFamily:    '"Arial Black", Arial, sans-serif',
-        fontSize:      '15px',
-        color:         '#ffffff',
-        background:    '#444444',
-        border:        '2px solid #888888',
-        borderRadius:  '10px',
-        padding:       '10px 20px',
-        cursor:        'pointer',
-        zIndex:        '100',
-        minHeight:     '44px',        // iOS minimum touch target
-        touchAction:   'manipulation', // förhindrar dubbelklickszoom
-        userSelect:    'none'
+        Object.assign(btn.style, {
+            position:      'fixed',
+            fontFamily:    '"Arial Black", Arial, sans-serif',
+            fontSize:      '15px',
+            color:         '#ffffff',
+            background:    '#444444',
+            border:        '2px solid #888888',
+            borderRadius:  '10px',
+            padding:       '10px 20px',
+            cursor:        'pointer',
+            zIndex:        '100',
+            minHeight:     '44px',
+            touchAction:   'manipulation',
+            userSelect:    'none'
+        });
 
-        
-    });
+        document.body.appendChild(btn);
 
-    document.body.appendChild(btn);
+        const reposition = () => {
+            const r = this.sys.game.canvas.getBoundingClientRect();
+            btn.style.top  = Math.round(r.top  + 10) + 'px';
+            btn.style.left = Math.round(r.left + 10) + 'px';
+        };
+        reposition();
+        this.scale.on('resize', reposition);
 
-    // Placera knappen i canvas övre vänstra hörn, uppdateras vid resize
-    const reposition = () => {
-        const r = this.sys.game.canvas.getBoundingClientRect();
-        btn.style.top  = Math.round(r.top  + 10) + 'px';
-        btn.style.left = Math.round(r.left + 10) + 'px';
-    };
-    reposition();
-    this.scale.on('resize', reposition);
+        btn.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+            this.scene.start('MainMenu');
+        });
 
-    btn.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        this.scene.start('MainMenu');
-    });
+        const cleanup = () => {
+            this.scale.off('resize', reposition);
+            btn.remove();
+        };
+        this.events.once('shutdown', cleanup);
+        this.events.once('destroy',  cleanup);
 
-    // Ta bort knappen och eventet när scenen stängs
-    const cleanup = () => {
-        this.scale.off('resize', reposition);
-        btn.remove();
-    };
-    this.events.once('shutdown', cleanup);
-    this.events.once('destroy',  cleanup);
-
-    
-    return btn;
-
-}
+        return btn;
+    }
 }

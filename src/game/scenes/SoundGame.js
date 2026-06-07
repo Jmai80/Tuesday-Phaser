@@ -73,13 +73,13 @@ export class SoundGame extends BaseGameScene
 {
     const btn = super.createBackButton();   // responsiv grund från basen
 
-    // Din styling för Ljudjakten
     Object.assign(btn.style, {
-        background:   '#1a1a4a',            // mörkblå som matchar spelplanens färg
-        border:       '2px solid #3366cc',
-        borderRadius: '12px',
-        color:        '#ffffff'
-    });
+    background:    '#1a1a4a',
+    border:        'none',                   // ta bort alla kanter
+    borderLeft:    '4px solid #3366cc',      // bara vänster
+    borderRadius:  '0 12px 12px 0',          // skarp vänster, rundad höger
+    color:         '#ffffff'
+});
 
     // Valfritt: hover-effekt via CSS-transition (lägg transition i basen om du inte redan har det)
     btn.addEventListener('mouseenter', () => btn.style.background = '#2a2a6a');

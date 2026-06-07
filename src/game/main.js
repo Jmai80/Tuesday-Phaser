@@ -12,7 +12,10 @@ import { WordGame } from './scenes/WordGame';
 import { PatternGame } from './scenes/PatternGame';
 import { RhymeGame } from './scenes/RhymeGame';
 import { SoundGame } from './scenes/SoundGame';
+import { TicTacToe } from './scenes/TicTacToe';
+import { FruitCatcher } from './scenes/FruitCatcher';
 import { Preloader } from './scenes/Preloader';
+
 import { AUTO, Game, Scale } from 'phaser';
 
 //  Find out more information about the Game Config at:
@@ -41,9 +44,14 @@ const config = {
         PatternGame,
         RhymeGame,
         SoundGame,
+        TicTacToe,
+        FruitCatcher,
         MainGame,
         GameOver
-    ]
+    ],
+    dom: {
+        createContainer: true
+    }
 };
 
 const StartGame = (parent) => {
