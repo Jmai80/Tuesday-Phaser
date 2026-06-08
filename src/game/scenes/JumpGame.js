@@ -249,7 +249,8 @@ export class JumpGame extends BaseGameScene
     // ── Hoppa ─────────────────────────────────────────────────────────────────
     tryJump ()
     {
-        if (this.gameOver) { this.restartGame(); return; }
+        // Vid game over sköter popup-knapparna omstart/meny — gör inget här.
+        if (this.gameOver) return;
         if (!this.started) { this.startGame(); }
         if (this.onGround) {
             this.velY    = -820;
