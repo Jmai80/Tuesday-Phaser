@@ -29,7 +29,10 @@ export class MainMenu extends Scene
             { title: 'Fruktfångaren',  scene: 'FruitCatcher' },
             { title: 'Labyrinten',     scene: 'MazeGame' },
             { title: 'Spinnern',       scene: 'SpinnerGame' },
-            { title: 'Pac-Man',        scene: 'PacManGame' }
+            { title: 'Pac-Man',        scene: 'PacManGame' },
+            { title: 'Klockspelet',    scene: 'ClockGame' },
+            { title: 'Hoppspelet',     scene: 'JumpGame' },
+            { title: 'Ordbyggaren',    scene: 'WordBuilder' }
         ];
 
         // --- Bakgrund: mjuk gradient (ligger UTANFÖR scroll-ytan) ---

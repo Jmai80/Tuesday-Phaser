@@ -17,6 +17,9 @@ import { FruitCatcher } from './scenes/FruitCatcher';
 import { MazeGame } from './scenes/MazeGame';
 import { SpinnerGame } from './scenes/SpinnerGame';
 import { PacManGame } from './scenes/PacMan';
+import { ClockGame } from './scenes/ClockGame';
+import { JumpGame } from './scenes/JumpGame';
+import { WordBuilder } from './scenes/WordBuilder';
 import { Preloader } from './scenes/Preloader';
 
 import { AUTO, Game, Scale } from 'phaser';
@@ -52,6 +55,9 @@ const config = {
         MazeGame,
         SpinnerGame,
         PacManGame,
+        ClockGame,
+        JumpGame,
+        WordBuilder,
         MainGame,
         GameOver
     ],
