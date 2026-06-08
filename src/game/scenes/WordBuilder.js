@@ -32,7 +32,7 @@ export class WordBuilder extends BaseGameScene
             { word: 'MÅNE',   hint: '🌙' },
             { word: 'ÄPPLE',  hint: '🍎' },
             { word: 'BOLL',   hint: '⚽' },
-            { word: 'TÅRTA',   hint: '🎂' },
+            { word: 'TÅRT',   hint: '🎂' },
             { word: 'SNÖGUBBE', hint: '☃️' },
             { word: 'BLOMMA', hint: '🌸' },
             { word: 'MOLN',   hint: '☁️' },
@@ -198,30 +198,24 @@ export class WordBuilder extends BaseGameScene
     spawnTile ()
     {
         const word    = this.currentWord;
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+        const letters  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+        const needed   = word[this.nextIndex];
 
-        // Hur många distraktorer per "rätt" bokstav beror på svårighetsgrad
-        const distractorCount = [0, 1, 2, 3][this.difficulty] ?? 2;
+        // Finns den behövda bokstaven redan på skärmen?
+        const neededOnScreen = this.tiles.some(t => t.letter === needed);
 
-        // Bygg poolen: alla bokstäver i ordet som ännu inte är klickade, + distraktorer
-        const pool = [];
-
-        // Lägg till bokstäverna som återstår i ordet (inte bara nästa — alla)
-        for (let i = this.nextIndex; i < word.length; i++) {
-            pool.push({ letter: word[i], correct: i === this.nextIndex });
+        // Garantera att rätt bokstav alltid går att hitta:
+        //  • Om den inte finns på skärmen → spawna den nu.
+        //  • Annars: oftast en distraktor, men ibland en extra kopia av rätt bokstav.
+        let letter;
+        if (!neededOnScreen) {
+            letter = needed;
+        } else if (Math.random() < 0.30) {
+            letter = needed;                       // extra kopia (mer förlåtande)
+        } else {
+            do { letter = letters[Math.floor(Math.random() * letters.length)]; }
+            while (letter === needed);             // distraktor
         }
-
-        // Distraktorer — bokstäver som INTE är nästa rätta bokstav
-        for (let d = 0; d < distractorCount; d++) {
-            let l;
-            do { l = letters[Math.floor(Math.random() * letters.length)]; }
-            while (l === word[this.nextIndex]);
-            pool.push({ letter: l, correct: false });
-        }
-
-        // Välj en slumpmässig från poolen
-        const pick   = pool[Math.floor(Math.random() * pool.length)];
-        const letter = pick.letter;
 
         // Position — undvik överlapp med befintliga brickor
         let x, attempts = 0;
@@ -474,29 +468,9 @@ export class WordBuilder extends BaseGameScene
             const isNext = tile.letter === this.currentWord[this.nextIndex];
             this.drawTile(tile.gfx, tile.x, 0, tile.size, tile.color, isNext);
 
-            // Brickan når botten
+            // Brickan når botten — ta bara bort den, inget straff.
+            // (Rätt bokstav spawnar garanterat igen, så spelaren fastnar aldrig.)
             if (tile.y > this.H + 40) {
-                // Om det var nästa rätta bokstav → livsförlust
-                if (tile.letter === this.currentWord[this.nextIndex]) {
-                    this.lives--;
-                    this.updateHearts();
-
-                    // Blinka hjärtan
-                    this.tweens.add({
-                        targets: this.heartTxt, alpha: 0.1,
-                        duration: 100, yoyo: true, repeat: 3
-                    });
-
-                    if (this.lives <= 0) {
-                        if (tile.zone) tile.zone.destroy();
-                        tile.gfx.destroy();
-                        tile.lbl.destroy();
-                        this.tiles.splice(i, 1);
-                        this.onWordFailed();
-                        return;
-                    }
-                }
-
                 if (tile.zone) tile.zone.destroy();
                 tile.gfx.destroy();
                 tile.lbl.destroy();
